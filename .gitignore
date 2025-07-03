@@ -1,0 +1,21 @@
+# Thư mục output chứa dữ liệu người dùng
+/output/*
+
+# Thư mục uploads chứa dữ liệu tạm thời
+/uploads/*
+
+# File trạng thái tiến trình
+active_processes.json
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+env/
+venv/
+.env
+.venv
+ENV/
+
