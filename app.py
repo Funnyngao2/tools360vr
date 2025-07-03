@@ -1713,18 +1713,3 @@ def test_resources():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-if __name__ == "__main__":
-    # Check if we're running in a production environment
-    is_production = os.environ.get('PRODUCTION', 'False').lower() == 'true'
-    
-    if is_production:
-        # Production settings - use host/port from environment or defaults
-        host = os.environ.get('HOST', '0.0.0.0')
-        port = int(os.environ.get('PORT', 80))
-        debug = False
-        print(f"Running in production mode on {host}:{port}")
-        app.run(debug=debug, host=host, port=port)
-    else:
-        # Development settings
-        print("Running in development mode on 0.0.0.0:51333")
-        app.run(debug=True, host='0.0.0.0', port=int(os.environ.get("PORT", 51333))) 
