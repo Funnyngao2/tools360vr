@@ -37,14 +37,14 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # Path to file storing active process states
-ACTIVE_PROCESSES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'active_processes.json')
+ACTIVE_PROCESSES_FILE = os.path.join(tempfile.gettempdir(), 'active_processes.json')
 
 # Dictionary to store active processes
 active_processes = {}
 
 # Define important paths
-UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
-OUTPUT_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output')
+UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads'))
+OUTPUT_FOLDER = os.environ.get('OUTPUT_FOLDER', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output'))
 WEBTOOLS_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PHANMENGOC_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'phanmengoc')
 
@@ -54,7 +54,18 @@ os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 # Configuration for image processing
 CUBE_SIZE = 1920
-MAX_WORKERS = min(cpu_count(), 8)  # Limit workers to avoid RAM overload
+
+# Check if we're running in a container environment
+IN_CONTAINER = os.environ.get('CONTAINER', 'False').lower() == 'true' or os.environ.get('RAILWAY_STATIC_URL', '') != ''
+
+# Adjust MAX_WORKERS based on environment
+if IN_CONTAINER:
+    # Use a more conservative setting in container environments
+    print("Container environment detected, using conservative worker settings")
+    MAX_WORKERS = min(2, cpu_count())
+else:
+    # Normal setting for local development
+    MAX_WORKERS = min(cpu_count(), 8)  # Limit workers to avoid RAM overload
 
 # Face transformation parameters
 face_params = {
@@ -208,12 +219,23 @@ def convert_spherical_to_cube_optimized(input_path, output_folder, size=CUBE_SIZ
 
     os.makedirs(output_folder, exist_ok=True)
 
-    # Use multiprocessing to create cube faces
-    with ProcessPoolExecutor(max_workers=min(6, MAX_WORKERS)) as executor:
-        face_args = [(pano_img, face, size) for face in face_params.keys()]
-        results = list(executor.map(create_cube_face_batch, face_args))
-
+    # Try to use multiprocessing, fall back to sequential processing if it fails
+    face_args = [(pano_img, face, size) for face in face_params.keys()]
     faces_images = {}
+    
+    try:
+        if IN_CONTAINER:
+            # In container environments, prefer sequential processing
+            print("Using sequential processing in container environment")
+            results = [create_cube_face_batch(args) for args in face_args]
+        else:
+            # Use multiprocessing when not in a container
+            with ProcessPoolExecutor(max_workers=min(6, MAX_WORKERS)) as executor:
+                results = list(executor.map(create_cube_face_batch, face_args))
+    except Exception as e:
+        print(f"Multiprocessing failed: {str(e)}, falling back to sequential processing")
+        # Fall back to sequential processing
+        results = [create_cube_face_batch(args) for args in face_args]
     
     # Save face images
     for face, face_img in results:
@@ -424,10 +446,23 @@ def batch_convert_optimized(input_folder, output_folder, size=CUBE_SIZE, title="
     panosuser_folder = os.path.join(output_folder, "panosuser")
     os.makedirs(panosuser_folder, exist_ok=True)
 
-    # Use multiprocessing to process multiple images at once
-    with ProcessPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        process_args = [(f, panosuser_folder, size) for f in files]
-        results = list(executor.map(process_single_image, process_args))
+    # Prepare process arguments
+    process_args = [(f, panosuser_folder, size) for f in files]
+    
+    # Try multiprocessing, fall back to sequential processing if needed
+    try:
+        if IN_CONTAINER:
+            # In container environments, prefer sequential processing
+            print("Using sequential processing in container environment")
+            results = [process_single_image(args) for args in process_args]
+        else:
+            # Use multiprocessing when not in a container
+            with ProcessPoolExecutor(max_workers=MAX_WORKERS) as executor:
+                results = list(executor.map(process_single_image, process_args))
+    except Exception as e:
+        print(f"Multiprocessing failed: {str(e)}, falling back to sequential processing")
+        # Fall back to sequential processing
+        results = [process_single_image(args) for args in process_args]
 
     # Filter successful results
     processed_images = [r for r in results if r is not None]
@@ -464,6 +499,7 @@ def load_active_processes():
             print(f"Error loading processes from file: {str(e)}")
             active_processes = {}
     else:
+        print(f"Active processes file not found at {ACTIVE_PROCESSES_FILE}, using empty dict")
         active_processes = {}
 
 def save_active_processes():
@@ -471,11 +507,15 @@ def save_active_processes():
     Save active process information to file
     """
     try:
+        # Ensure directory exists
+        os.makedirs(os.path.dirname(ACTIVE_PROCESSES_FILE), exist_ok=True)
+        
         with open(ACTIVE_PROCESSES_FILE, 'w') as f:
             json.dump(active_processes, f, indent=2)
             print(f"Saved {len(active_processes)} processes to file")
     except Exception as e:
-        print(f"Error saving processes to file: {str(e)}")
+        print(f"Error saving processes to file {ACTIVE_PROCESSES_FILE}: {str(e)}")
+        # Continue execution even if save fails
 
 def register_process(process_id, info):
     """
