@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<krpano title="123">
+	<version>Generated on 2025-07-02 17:51:49</version>
+	<include url="/api/phanmengoc/skin/vtourskin.xml"/>
+	<include url="/api/phanmengoc/skin/vtourskin_design_ultra_light.xml"/>
+	<scene name="funny_250529_V1_PIN_20" title="250529_V1_PIN_20" onstart="" thumburl="/api/output/123_250702175145_4zrhz5/panosuser/250529_V1_PIN_20/thumb.jpg" lat="" lng="" alt="" heading="">
+		<control bouncinglimits="calc:image.cube ? true : false"/>
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto"/>
+		<preview url="/api/output/123_250702175145_4zrhz5/panosuser/250529_V1_PIN_20/preview.jpg"/>
+		<image>
+			<cube url="/api/output/123_250702175145_4zrhz5/panosuser/250529_V1_PIN_20/pano_%s.jpg"/>
+		</image>
+	</scene>
+	<!--scene tiếp theo-->
+</krpano>

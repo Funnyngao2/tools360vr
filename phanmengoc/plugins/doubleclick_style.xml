@@ -1,0 +1,24 @@
+<krpano>
+	
+	<!--
+		doubleclick_style.xml
+		krpano 1.22
+	
+		Note - since version 1.22 the onsingleclick and ondoubleclick events are built-in!
+		
+		That means no extra code is required. This file here is only for compatibility
+		and contains now an 'empty' doubleclick style. When updating old examples, the
+		including of this file could be removed therefore.
+		
+		Example:
+		
+		<layer ...
+		       style="doubleclick"
+		       onsingleclick="trace('-single click-');"
+		       ondoubleclick="trace('-double click-');"
+		       />
+	-->
+	
+	<style name="doubleclick" />
+	
+</krpano>

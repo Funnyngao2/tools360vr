@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<krpano title="123">
+	<version>Generated on 2025-07-02 17:52:39</version>
+	<include url="/api/phanmengoc/skin/vtourskin.xml"/>
+	<include url="/api/phanmengoc/skin/vtourskin_design_ultra_light.xml"/>
+	<scene name="funny_PIN360_PC_TONG_THE_NIGHT" title="PIN360_PC_TONG_THE_NIGHT" onstart="" thumburl="/api/output/123_250702175156_c6g1gb/panosuser/PIN360_PC_TONG_THE_NIGHT/thumb.jpg" lat="" lng="" alt="" heading="">
+		<control bouncinglimits="calc:image.cube ? true : false"/>
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto"/>
+		<preview url="/api/output/123_250702175156_c6g1gb/panosuser/PIN360_PC_TONG_THE_NIGHT/preview.jpg"/>
+		<image>
+			<cube url="/api/output/123_250702175156_c6g1gb/panosuser/PIN360_PC_TONG_THE_NIGHT/pano_%s.jpg"/>
+		</image>
+	</scene>
+	<scene name="funny_ASV_THE_PRIVE_CAN_2PN_PIN9" title="ASV_THE_PRIVE_CAN_2PN_PIN9" onstart="" thumburl="/api/output/123_250702175156_c6g1gb/panosuser/ASV_THE_PRIVE_CAN_2PN_PIN9/thumb.jpg" lat="" lng="" alt="" heading="">
+		<control bouncinglimits="calc:image.cube ? true : false"/>
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto"/>
+		<preview url="/api/output/123_250702175156_c6g1gb/panosuser/ASV_THE_PRIVE_CAN_2PN_PIN9/preview.jpg"/>
+		<image>
+			<cube url="/api/output/123_250702175156_c6g1gb/panosuser/ASV_THE_PRIVE_CAN_2PN_PIN9/pano_%s.jpg"/>
+		</image>
+	</scene>
+	<scene name="funny_ASV_PRIVE_PIN7" title="ASV_PRIVE_PIN7" onstart="" thumburl="/api/output/123_250702175156_c6g1gb/panosuser/ASV_PRIVE_PIN7/thumb.jpg" lat="" lng="" alt="" heading="">
+		<control bouncinglimits="calc:image.cube ? true : false"/>
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto"/>
+		<preview url="/api/output/123_250702175156_c6g1gb/panosuser/ASV_PRIVE_PIN7/preview.jpg"/>
+		<image>
+			<cube url="/api/output/123_250702175156_c6g1gb/panosuser/ASV_PRIVE_PIN7/pano_%s.jpg"/>
+		</image>
+	</scene>
+	<scene name="funny_ASV_PRIVE_PIN8" title="ASV_PRIVE_PIN8" onstart="" thumburl="/api/output/123_250702175156_c6g1gb/panosuser/ASV_PRIVE_PIN8/thumb.jpg" lat="" lng="" alt="" heading="">
+		<control bouncinglimits="calc:image.cube ? true : false"/>
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto"/>
+		<preview url="/api/output/123_250702175156_c6g1gb/panosuser/ASV_PRIVE_PIN8/preview.jpg"/>
+		<image>
+			<cube url="/api/output/123_250702175156_c6g1gb/panosuser/ASV_PRIVE_PIN8/pano_%s.jpg"/>
+		</image>
+	</scene>
+	<!--scene tiếp theo-->
+</krpano>
